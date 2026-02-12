@@ -1,9 +1,10 @@
+import org.w3c.dom.ls.LSOutput;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
-    static ArrayList<String> tasks = new ArrayList<String>();
-    static ArrayList<String> taskStatus = new ArrayList<String>();
+    static ArrayList<Task> tasks = new ArrayList<>();
 
     public static void main(String[] args) {
 
@@ -52,16 +53,22 @@ public class Main {
     static void addTask(Scanner scan){
         System.out.print("Enter description of the task: ");
         String description = scan.nextLine();
-        tasks.add(description);
-        taskStatus.add("[Undone]");
+        tasks.add(new Task(description));
         System.out.println("Task added.");
     }
 
     static void viewTasks(){
-        for(int i=0; i<tasks.size(); i++){
-            System.out.println(i+1 + ". " + tasks.get(i) + " " + taskStatus.get(i));
+        if(!tasks.isEmpty()){
+            for(int i=0; i<tasks.size(); i++){
+            Task task = tasks.get(i);
+            System.out.println(i+1 + ". " + task.getDescription() + " " + task.getStatus());
+            }
         }
-    }
+        else{
+                System.out.println("There is no task to view.");
+            }
+        }
+
 
     static void changeStatus(Scanner scan){
         System.out.println("Select a task to change status:");
@@ -69,10 +76,11 @@ public class Main {
         int choice = scan.nextInt();
         scan.nextLine();
         System.out.println("1. In progress\n2. Done");
+
         int status = scan.nextInt();
         scan.nextLine();
-        if(status == 1){taskStatus.set(choice-1, "[In progress]");}
-        else if(status == 2){taskStatus.set(choice-1, "[Done]");}
+        if(status == 1){tasks.get(choice-1).setStatus("[In progress]");}
+        else if(status == 2){tasks.get(choice-1).setStatus("[Done]");}
         else{
             System.out.println("Invalid input");
         }
@@ -84,6 +92,5 @@ public class Main {
         int choice = scan.nextInt();
         scan.nextLine();
         tasks.remove(choice-1);
-        taskStatus.remove(choice-1);
     }
 }
